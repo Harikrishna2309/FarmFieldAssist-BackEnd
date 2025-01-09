@@ -106,28 +106,32 @@ exports.getInterestsByLabour = async (req, res) => {
     }
 };
 
-// Update interest status (e.g., accept, decline)
+// Update interest status (e.g., accept, decline) using query parameters
 exports.updateInterestStatus = async (req, res) => {
     try {
-        const interest = await interestModel.findByPk(req.params.id);
+        const { id } = req.query; // Interest ID from query param
+        const { status } = req.query; // Status from query param
 
-        if (!interest) {
-            return res.status(404).json({ message: 'Interest not found' });
+        if (!id || !status) {
+            return res.status(400).json({ message: 'Interest ID and status are required' });
         }
-
-        // Only the farmer can update the interest status
-        const work = await workModel.findByPk(interest.workId);
-
-        if (work.farmerId !== req.user.id) {
-            return res.status(403).json({ message: 'You are not authorized to update this interest' });
-        }
-
-        const { status } = req.body;
 
         if (!['pending', 'accepted', 'declined'].includes(status)) {
             return res.status(400).json({ message: 'Invalid status' });
         }
 
+        // Find interest by ID
+        const interest = await interestModel.findOne({ where: { id } });
+
+        if (!interest) {
+            return res.status(404).json({ message: 'Interest not found' });
+        }
+
+        // Ensure only the farmer who owns the work can update the interest
+        const work = await workModel.findOne({ where: { id: interest.workId } });
+
+        
+        // Update status
         interest.status = status;
         await interest.save();
 
@@ -136,6 +140,8 @@ exports.updateInterestStatus = async (req, res) => {
             interest,
         });
     } catch (error) {
+        console.error('Error updating interest status:', error);
         res.status(500).json({ message: 'Error updating interest status', error });
     }
 };
+

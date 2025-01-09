@@ -7,7 +7,6 @@ const authMiddleware = require('../middleware/auth');
 routes.post('/express', authMiddleware, interestController.expressInterest);
 routes.get('/interests', authMiddleware, interestController.getInterestsByWork); 
 routes.get('/interestbyuser', authMiddleware, interestController.getInterestsByLabour);
-
-routes.put('/:id/status', authMiddleware, interestController.updateInterestStatus); // Farmer updates interest status (accept/decline)
+routes.put('/editinterest', authMiddleware, interestController.updateInterestStatus);
 
 module.exports = routes;
