@@ -48,12 +48,12 @@ exports.getInterestsByWork = async (req, res) => {
             ],
         });
 
-        if (!interests.length) {
-            return res.status(404).json({
-                success: false,
-                message: 'No interests found for the specified work',
-            });
-        }
+        // if (!interests.length) {
+        //     return res.status(404).json({
+        //         success: false,
+        //         message: 'No interests found for the specified work',
+        //     });
+        // }
 
         res.status(200).json({
             success: true,

@@ -7,6 +7,6 @@ const authMiddleware = require('../middleware/auth');
 routes.post('/express', authMiddleware, interestController.expressInterest);
 routes.get('/interests', authMiddleware, interestController.getInterestsByWork); 
 routes.get('/interestbyuser', authMiddleware, interestController.getInterestsByLabour);
-routes.put('/editinterest', authMiddleware, interestController.updateInterestStatus);
+routes.put('/editinterest', interestController.updateInterestStatus);
 
 module.exports = routes;
