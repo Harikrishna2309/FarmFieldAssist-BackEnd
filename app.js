@@ -17,6 +17,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 require('./models/user');
 require('./models/work');
 require('./models/interest');
+require('./models/message');
+
+//message
+const http = require("http");
+const initializeSocket = require("./socket");
+const messageRoutes = require("./routes/messageRoutes");
+const server = http.createServer(app);
+const io = initializeSocket(server);
+app.use("/formfield/api/messages", messageRoutes);
 
 // Sync sequelize models
 sequelize.sync()
